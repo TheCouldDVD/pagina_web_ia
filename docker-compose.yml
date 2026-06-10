@@ -1,7 +1,7 @@
 services:
   web:
     build: .
-    container_name: locoreria-eden
+    container_name: pagina_web_ia
     ports:
       - "8080:80"
     restart: unless-stopped
