@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inteligencia Artificial — Guía Completa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #050A14;
+    --bg2: #0B1120;
+    --bg3: #111827;
+    --surface: #161F30;
+    --border: rgba(99,179,237,0.12);
+    --accent: #5EAEFF;
+    --accent2: #A78BFA;
+    --accent3: #34D399;
+    --text: #F0F4FF;
+    --muted: #8FA0B8;
+    --card-bg: rgba(22,31,48,0.8);
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 2.5rem;
+    background: rgba(5,10,20,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center;
+    padding: 8rem 2rem 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(94,174,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(94,174,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  }
+  .hero-glow {
+    position: absolute; top: 20%; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(94,174,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+  }
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 540px;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+  }
+  .hero-cta {
+    display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: 6px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #050A14;
+  }
+  .btn-primary:hover { background: #89caff; transform: translateY(-1px); }
+  .btn-ghost {
+    background: transparent;
+    border: 0.5px solid var(--border);
+    color: var(--text);
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: flex; justify-content: center; gap: 4rem;
+    padding: 3rem 2rem;
+    border-top: 0.5px solid var(--border);
+    border-bottom: 0.5px solid var(--border);
+    background: var(--bg2);
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.5rem;
+    color: var(--accent);
+    display: block;
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+
+  /* SECTIONS */
+  section { padding: 6rem 2rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.25rem;
+  }
+  h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+  }
+  p { color: var(--muted); line-height: 1.8; }
+
+  /* QUÉ ES IA */
+  .what-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-top: 3rem;
+    align-items: start;
+  }
+  .what-text p + p { margin-top: 1rem; }
+  .what-text p { font-size: 1.05rem; }
+  .concept-list { list-style: none; margin-top: 1.5rem; }
+  .concept-list li {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    padding: 0.9rem 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .concept-list li:last-child { border-bottom: none; }
+  .concept-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-top: 0.5rem;
+    flex-shrink: 0;
+  }
+  .concept-list span { color: var(--muted); font-size: 0.95rem; }
+  .concept-list strong { color: var(--text); display: block; font-size: 1rem; }
+
+  /* TIPOS */
+  .tipos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-top: 3rem;
+  }
+  .tipo-card {
+    background: var(--card-bg);
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    transition: border-color 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .tipo-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  }
+  .tipo-card.blue::before { background: var(--accent); }
+  .tipo-card.purple::before { background: var(--accent2); }
+  .tipo-card.green::before { background: var(--accent3); }
+  .tipo-card:hover { border-color: rgba(94,174,255,0.25); transform: translateY(-3px); }
+  .tipo-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+  .tipo-card p { font-size: 0.9rem; margin-top: 0.5rem; }
+
+  /* APLICACIONES */
+  .apps-section { background: var(--bg2); }
+  .apps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-top: 3rem;
+  }
+  .app-card {
+    background: var(--bg3);
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: border-color 0.2s;
+  }
+  .app-card:hover { border-color: rgba(94,174,255,0.2); }
+  .app-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+  .app-card h3 { font-size: 1rem; }
+  .app-card p { font-size: 0.875rem; margin-top: 0.4rem; }
+
+  /* HISTORIA TIMELINE */
+  .timeline { margin-top: 3rem; position: relative; }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 7px; top: 8px; bottom: 0;
+    width: 1px; background: var(--border);
+  }
+  .tl-item {
+    display: flex; gap: 1.5rem;
+    padding-bottom: 2.5rem;
+    position: relative;
+  }
+  .tl-dot {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--bg); border: 2px solid var(--accent);
+    flex-shrink: 0; margin-top: 4px;
+    z-index: 1;
+  }
+  .tl-year {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+  }
+  .tl-item h3 { font-size: 1rem; }
+  .tl-item p { font-size: 0.9rem; }
+
+  /* CÓMO FUNCIONA */
+  .how-section { background: var(--bg2); }
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 3rem;
+  }
+  .step {
+    background: var(--bg3);
+    padding: 2rem 1.5rem;
+    position: relative;
+  }
+  .step-arrow {
+    position: absolute; right: -12px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent);
+    font-size: 1.2rem;
+    z-index: 2;
+  }
+  .step-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem;
+    color: rgba(94,174,255,0.12);
+    line-height: 1;
+    margin-bottom: 0.75rem;
+  }
+  .step h3 { font-size: 0.95rem; }
+  .step p { font-size: 0.85rem; margin-top: 0.4rem; }
+
+  /* MODELOS */
+  .models-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .model-card {
+    background: var(--card-bg);
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+  }
+  .model-tag {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .tag-azul { background: rgba(94,174,255,0.1); color: var(--accent); }
+  .tag-morado { background: rgba(167,139,250,0.1); color: var(--accent2); }
+  .tag-verde { background: rgba(52,211,153,0.1); color: var(--accent3); }
+  .model-card h3 { font-size: 1.1rem; }
+  .model-card p { font-size: 0.875rem; margin-top: 0.5rem; }
+
+  /* ÉTICA */
+  .etica-section { background: var(--bg2); }
+  .etica-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-top: 3rem;
+  }
+  .etica-card {
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+  }
+  .etica-card.warn { border-left: 2px solid #F59E0B; }
+  .etica-card.ok { border-left: 2px solid var(--accent3); }
+  .etica-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .warn .etica-label { color: #F59E0B; }
+  .ok .etica-label { color: var(--accent3); }
+  .etica-card p { font-size: 0.9rem; }
+
+  /* FUTURO */
+  .futuro-items {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+  .futuro-item {
+    display: flex; gap: 1.25rem;
+    align-items: flex-start;
+  }
+  .futuro-icon {
+    width: 44px; height: 44px; flex-shrink: 0;
+    border-radius: 10px;
+    background: rgba(94,174,255,0.08);
+    border: 0.5px solid rgba(94,174,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+  }
+  .futuro-item h3 { font-size: 1rem; }
+  .futuro-item p { font-size: 0.875rem; margin-top: 0.3rem; }
+
+  /* RECURSOS */
+  .recursos-section { background: var(--bg2); }
+  .recursos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-top: 3rem;
+  }
+  .recurso-card {
+    background: var(--bg3);
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-decoration: none;
+    display: block;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .recurso-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .recurso-type {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  .recurso-card h3 { color: var(--text); font-size: 0.95rem; }
+  .recurso-card p { font-size: 0.825rem; margin-top: 0.3rem; }
+  .recurso-arrow {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--accent);
+  }
+
+  /* GLOSSARY */
+  .glosario-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border: 0.5px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 3rem;
+  }
+  .glosario-item {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 0.5px solid var(--border);
+    border-right: 0.5px solid var(--border);
+  }
+  .glosario-item:nth-child(even) { border-right: none; }
+  .glosario-term {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--accent2);
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+  }
+  .glosario-item p { font-size: 0.85rem; }
+
+  /* FOOTER */
+  footer {
+    padding: 4rem 2rem;
+    border-top: 0.5px solid var(--border);
+    text-align: center;
+  }
+  .footer-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.75rem;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 1rem;
+  }
+  footer p { font-size: 0.875rem; }
+
+  /* SCROLL ANIMATIONS */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .what-grid, .tipos-grid, .models-grid, .etica-grid,
+    .futuro-items, .recursos-grid { grid-template-columns: 1fr; }
+    .steps-grid { grid-template-columns: 1fr 1fr; }
+    .nav-links { display: none; }
+    nav { padding: 1rem 1.5rem; }
+    .stats-bar { gap: 2rem; }
+  }
+
+  @media (max-width: 560px) {
+    .steps-grid { grid-template-columns: 1fr; }
+    .glosario-grid { grid-template-columns: 1fr; }
+    .glosario-item { border-right: none; }
+    section { padding: 4rem 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">IA</a>
+  <ul class="nav-links">
+    <li><a href="#que-es">¿Qué es?</a></li>
+    <li><a href="#tipos">Tipos</a></li>
+    <li><a href="#aplicaciones">Aplicaciones</a></li>
+    <li><a href="#historia">Historia</a></li>
+    <li><a href="#modelos">Modelos</a></li>
+    <li><a href="#etica">Ética</a></li>
+    <li><a href="#futuro">Futuro</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <p class="eyebrow">Guía completa · 2025</p>
+  <h1>Inteligencia<br><em>Artificial</em></h1>
+  <p class="hero-sub">Desde los fundamentos teóricos hasta los sistemas que están transformando la ciencia, la medicina y la sociedad global.</p>
+  <div class="hero-cta">
+    <a href="#que-es" class="btn btn-primary">Explorar ↓</a>
+    <a href="#glosario" class="btn btn-ghost">Glosario</a>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat">
+    <span class="stat-num">$1.8T</span>
+    <span class="stat-label">Mercado global proyectado 2030</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">70+</span>
+    <span class="stat-label">Años de historia activa</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">500M</span>
+    <span class="stat-label">Usuarios de IA generativa</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">97%</span>
+    <span class="stat-label">Precisión diagnóstica médica</span>
+  </div>
+</div>
+
+<!-- QUÉ ES IA -->
+<section id="que-es">
+  <div class="container">
+    <p class="section-label">Fundamentos</p>
+    <h2>¿Qué es la Inteligencia Artificial?</h2>
+    <div class="what-grid reveal">
+      <div class="what-text">
+        <p>La Inteligencia Artificial es la disciplina de la ciencia de la computación que busca crear sistemas capaces de realizar tareas que, cuando las realiza un humano, requieren inteligencia.</p>
+        <p>No se trata de programar reglas explícitas, sino de construir sistemas que aprenden de datos y mejoran su desempeño con la experiencia. Desde reconocer una imagen hasta traducir idiomas o descubrir moléculas médicas.</p>
+        <p>Fue acuñada formalmente por John McCarthy en 1956, aunque sus raíces filosóficas se remontan a siglos de reflexión sobre la mente y la lógica.</p>
+      </div>
+      <div>
+        <ul class="concept-list">
+          <li>
+            <div class="concept-dot"></div>
+            <div>
+              <strong>Machine Learning</strong>
+              <span>Subsistemas que mejoran con la experiencia sin ser programados explícitamente.</span>
+            </div>
+          </li>
+          <li>
+            <div class="concept-dot"></div>
+            <div>
+              <strong>Deep Learning</strong>
+              <span>Redes neuronales profundas inspiradas en la estructura del cerebro humano.</span>
+            </div>
+          </li>
+          <li>
+            <div class="concept-dot"></div>
+            <div>
+              <strong>IA Simbólica</strong>
+              <span>Sistemas basados en reglas lógicas y representación del conocimiento.</span>
+            </div>
+          </li>
+          <li>
+            <div class="concept-dot"></div>
+            <div>
+              <strong>Procesamiento del Lenguaje Natural</strong>
+              <span>Comprensión y generación del lenguaje humano por máquinas.</span>
+            </div>
+          </li>
+          <li>
+            <div class="concept-dot"></div>
+            <div>
+              <strong>Visión Artificial</strong>
+              <span>Interpretación de imágenes y video con precisión sobrehumana.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIPOS DE IA -->
+<section id="tipos" style="background: var(--bg2);">
+  <div class="container">
+    <p class="section-label">Clasificación</p>
+    <h2>Tipos de Inteligencia Artificial</h2>
+    <p>Los investigadores clasifican la IA según su capacidad y alcance. Hoy habitamos el terreno de la IA estrecha; la general y superinteligente permanecen como horizontes teóricos.</p>
+    <div class="tipos-grid reveal">
+      <div class="tipo-card blue">
+        <p class="tipo-num">TIPO 01</p>
+        <h3>IA Estrecha (ANI)</h3>
+        <p>Diseñada para una tarea específica. ChatGPT, AlphaGo, los filtros de spam. Excele en su dominio pero carece de comprensión general. Es la única IA que existe hoy.</p>
+      </div>
+      <div class="tipo-card purple">
+        <p class="tipo-num">TIPO 02</p>
+        <h3>IA General (AGI)</h3>
+        <p>Sistema hipotético con capacidad cognitiva equivalente a la humana en cualquier dominio. Razonamiento, aprendizaje, creatividad. Aún no existe; es objetivo de investigación activa.</p>
+      </div>
+      <div class="tipo-card green">
+        <p class="tipo-num">TIPO 03</p>
+        <h3>Superinteligencia (ASI)</h3>
+        <p>IA que supera a la inteligencia humana en todos los ámbitos. Concepto teórico con implicaciones filosóficas y de seguridad profundas. Ningún consenso científico sobre su viabilidad.</p>
+      </div>
+      <div class="tipo-card blue">
+        <p class="tipo-num">TIPO 04</p>
+        <h3>IA Reactiva</h3>
+        <p>Sin memoria ni capacidad de aprender. Solo responde al estímulo presente. Deep Blue, el ajedrez de IBM, es el ejemplo clásico.</p>
+      </div>
+      <div class="tipo-card purple">
+        <p class="tipo-num">TIPO 05</p>
+        <h3>Memoria Limitada</h3>
+        <p>Usa experiencias pasadas recientes para tomar decisiones. Los vehículos autónomos y los modelos de lenguaje modernos pertenecen a esta categoría.</p>
+      </div>
+      <div class="tipo-card green">
+        <p class="tipo-num">TIPO 06</p>
+        <h3>IA Generativa</h3>
+        <p>Crea contenido original: texto, imágenes, audio, código. Basada en modelos de difusión y transformers. Representa la frontera más activa del campo actual.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APLICACIONES -->
+<section id="aplicaciones" class="apps-section">
+  <div class="container">
+    <p class="section-label">Aplicaciones</p>
+    <h2>Dónde vive la IA hoy</h2>
+    <p>La IA ya no es solo investigación académica. Está integrada en industrias críticas, transformando procesos que afectan a miles de millones de personas.</p>
+    <div class="apps-grid reveal">
+      <div class="app-card">
+        <span class="app-icon">🏥</span>
+        <h3>Medicina y Salud</h3>
+        <p>Diagnóstico por imagen, descubrimiento de fármacos, predicción de enfermedades y medicina personalizada.</p>
+      </div>
+      <div class="app-card">
+        <span class="app-icon">🎓</span>
+        <h3>Educación</h3>
+        <p>Tutores adaptativos, generación de contenido personalizado, detección temprana de dificultades de aprendizaje.</p>
+      </div>
+      <div class="app-card">
+        <span class="app-icon">🌾</span>
+        <h3>Agricultura</h3>
+        <p>Monitoreo de cultivos con drones, predicción de rendimiento, detección de plagas y optimización de riego.</p>
+      </div>
+      <div class="app-card">
+        <span class="app-icon">⚖️</span>
+        <h3>Justicia y Derecho</h3>
+        <p>Análisis de jurisprudencia, predicción de fallos, automatización de contratos y detección de fraude legal.</p>
+      </div>
+      <div class="app-card">
+        <span class="app-icon">🚗</span>
+        <h3>Transporte</h3>
+        <p>Vehículos autónomos, optimización de rutas, mantenimiento predictivo y gestión de tráfico en tiempo real.</p>
+      </div>
+      <div class="app-card">
+        <span class="app-icon">🎨</span>
+        <h3>Arte y Creatividad</h3>
+        <p>Generación de imágenes, composición musical, escritura asistida y producción cinematográfica.</p>
+      </div>
+      <div class="app-card">
+        <span class="app-icon">🔬</span>
+        <h3>Ciencia</h3>
+        <p>Predicción de estructuras proteicas (AlphaFold), simulación climática, física de partículas y genómica.</p>
+      </div>
+      <div class="app-card">
+        <span class="app-icon">💰</span>
+        <h3>Finanzas</h3>
+        <p>Trading algorítmico, evaluación de crédito, detección de fraude y asesoría financiera personalizada.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HISTORIA -->
+<section id="historia">
+  <div class="container">
+    <p class="section-label">Historia</p>
+    <h2>De Turing al presente</h2>
+    <p>Siete décadas de progreso discontinuo, marcadas por inviernos de escepticismo y primaveras de descubrimiento.</p>
+    <div class="timeline reveal">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div>
+          <p class="tl-year">1950</p>
+          <h3>Test de Turing</h3>
+          <p>Alan Turing publica "Computing Machinery and Intelligence" y propone la pregunta: ¿Pueden pensar las máquinas?</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div>
+          <p class="tl-year">1956</p>
+          <h3>Conferencia de Dartmouth</h3>
+          <p>John McCarthy acuña el término "Inteligencia Artificial". Nace oficialmente como disciplina científica.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div>
+          <p class="tl-year">1969 – 1980</p>
+          <h3>Primer Invierno de IA</h3>
+          <p>Las promesas superan los resultados. Los fondos se reducen drásticamente. La comunidad científica se fragmenta.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div>
+          <p class="tl-year">1986</p>
+          <h3>Retropropagación</h3>
+          <p>Rumelhart, Hinton y Williams popularizan el algoritmo de backpropagation, haciendo viables las redes neuronales.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div>
+          <p class="tl-year">1997</p>
+          <h3>Deep Blue vence a Kasparov</h3>
+          <p>La computadora de IBM derrota al campeón mundial de ajedrez. Un hito simbólico para la IA estrecha.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div>
+          <p class="tl-year">2012</p>
+          <h3>AlexNet y el renacimiento del Deep Learning</h3>
+          <p>Una red neuronal convolucional gana ImageNet con un margen aplastante. Las GPUs y los big data cambian todo.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div>
+          <p class="tl-year">2017</p>
+          <h3>Arquitectura Transformer</h3>
+          <p>Google publica "Attention is All You Need". Nace la arquitectura base de todos los grandes modelos de lenguaje modernos.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div>
+          <p class="tl-year">2022 – hoy</p>
+          <h3>Era de la IA Generativa</h3>
+          <p>ChatGPT, Midjourney, Claude, Gemini. La IA entra masivamente en la vida cotidiana de 500 millones de personas.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section class="how-section">
+  <div class="container">
+    <p class="section-label">Mecanismo</p>
+    <h2>Cómo aprende una IA</h2>
+    <p>El aprendizaje automático sigue un ciclo iterativo: datos crudos se transforman en representaciones que permiten predicciones cada vez más precisas.</p>
+    <div class="steps-grid reveal">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Datos</h3>
+        <p>Millones de ejemplos etiquetados: imágenes, textos, tablas. La calidad y diversidad determinan todo lo que sigue.</p>
+        <span class="step-arrow">→</span>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Entrenamiento</h3>
+        <p>El modelo ajusta billones de parámetros minimizando el error de predicción. GPU clusters durante semanas o meses.</p>
+        <span class="step-arrow">→</span>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Evaluación</h3>
+        <p>Se mide el desempeño en datos no vistos. Se detectan sesgos, fallas y límites antes del despliegue.</p>
+        <span class="step-arrow">→</span>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>Inferencia</h3>
+        <p>El modelo entrenado responde preguntas nuevas en tiempo real. El ciclo puede reiniciarse con datos frescos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODELOS DESTACADOS -->
+<section id="modelos">
+  <div class="container">
+    <p class="section-label">Modelos clave</p>
+    <h2>Sistemas que definieron el campo</h2>
+    <p>Estos modelos no solo avanzaron el estado del arte; cambiaron la dirección de la investigación y las expectativas públicas.</p>
+    <div class="models-grid reveal">
+      <div class="model-card">
+        <span class="model-tag tag-azul">Lenguaje</span>
+        <h3>GPT-4 / ChatGPT</h3>
+        <p>OpenAI. Modelo autoregresivo de 1 trillón de parámetros estimados. Primer modelo en superar el bar exam con percentil 90.</p>
+      </div>
+      <div class="model-card">
+        <span class="model-tag tag-morado">Razonamiento</span>
+        <h3>Claude 3 / Claude 4</h3>
+        <p>Anthropic. Modelos entrenados con RLHF y Constitutional AI para mayor seguridad, honestidad y utilidad.</p>
+      </div>
+      <div class="model-card">
+        <span class="model-tag tag-verde">Ciencia</span>
+        <h3>AlphaFold 3</h3>
+        <p>DeepMind. Predice estructuras 3D de proteínas y moléculas con precisión atómica. Premio Nobel de Química 2024.</p>
+      </div>
+      <div class="model-card">
+        <span class="model-tag tag-azul">Imagen</span>
+        <h3>DALL-E 3 / Midjourney</h3>
+        <p>Modelos de difusión que generan imágenes fotorrealistas desde descripciones textuales. Transformaron el diseño gráfico.</p>
+      </div>
+      <div class="model-card">
+        <span class="model-tag tag-morado">Multimodal</span>
+        <h3>Gemini Ultra</h3>
+        <p>Google DeepMind. Primer modelo en superar a humanos expertos en el benchmark MMLU. Procesa texto, imagen y audio.</p>
+      </div>
+      <div class="model-card">
+        <span class="model-tag tag-verde">Código</span>
+        <h3>GitHub Copilot / Codex</h3>
+        <p>OpenAI + Microsoft. Autocompleta código en 30+ lenguajes. Más de 1 millón de desarrolladores lo usan activamente.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ÉTICA -->
+<section id="etica" class="etica-section">
+  <div class="container">
+    <p class="section-label">Ética y Seguridad</p>
+    <h2>El lado humano de la IA</h2>
+    <p>El poder de los sistemas modernos plantea preguntas sin precedente sobre responsabilidad, sesgo, privacidad y el futuro del trabajo.</p>
+    <div class="etica-grid reveal">
+      <div class="etica-card warn">
+        <p class="etica-label">⚠ Desafíos</p>
+        <h3>Sesgos algorítmicos</h3>
+        <p>Los modelos heredan los prejuicios de sus datos de entrenamiento. Pueden perpetuar discriminación en contratación, crédito o justicia penal.</p>
+      </div>
+      <div class="etica-card ok">
+        <p class="etica-label">✓ Avances</p>
+        <h3>IA alineada con valores</h3>
+        <p>Técnicas como RLHF, Constitutional AI y red-teaming buscan sistemas más seguros, honestos y útiles para la humanidad.</p>
+      </div>
+      <div class="etica-card warn">
+        <p class="etica-label">⚠ Desafíos</p>
+        <h3>Desinformación y deepfakes</h3>
+        <p>La generación de contenido falso hiperrealista amenaza la confianza en la información. Los mecanismos de verificación son urgentes.</p>
+      </div>
+      <div class="etica-card ok">
+        <p class="etica-label">✓ Avances</p>
+        <h3>Regulación y gobernanza</h3>
+        <p>La Unión Europea aprobó la Ley de IA. EE.UU., China y otros países trabajan en marcos normativos para proteger a los ciudadanos.</p>
+      </div>
+      <div class="etica-card warn">
+        <p class="etica-label">⚠ Desafíos</p>
+        <h3>Impacto laboral</h3>
+        <p>La automatización amenaza empleos rutinarios mientras crea otros. La transición justa requiere políticas públicas proactivas.</p>
+      </div>
+      <div class="etica-card ok">
+        <p class="etica-label">✓ Avances</p>
+        <h3>Transparencia e interpretabilidad</h3>
+        <p>Nuevas técnicas de XAI (IA explicable) permiten entender por qué un modelo tomó una decisión. Esencial para sistemas críticos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FUTURO -->
+<section id="futuro">
+  <div class="container">
+    <p class="section-label">Perspectivas</p>
+    <h2>El horizonte de la IA</h2>
+    <p>Los próximos años prometen avances en razonamiento, agentes autónomos e integración con el mundo físico.</p>
+    <div class="futuro-items reveal">
+      <div class="futuro-item">
+        <div class="futuro-icon">🤖</div>
+        <div>
+          <h3>Agentes Autónomos</h3>
+          <p>IA que planifica, usa herramientas, navega la web y completa tareas complejas de múltiples pasos sin supervisión humana constante.</p>
+        </div>
+      </div>
+      <div class="futuro-item">
+        <div class="futuro-icon">🧠</div>
+        <div>
+          <h3>Razonamiento Formal</h3>
+          <p>Modelos que demuestran teoremas matemáticos, planifican con consistencia lógica y entienden causalidad, no solo correlación.</p>
+        </div>
+      </div>
+      <div class="futuro-item">
+        <div class="futuro-icon">💊</div>
+        <div>
+          <h3>IA en Biotecnología</h3>
+          <p>Diseño de proteínas terapéuticas, edición genómica asistida y simulación de ensayos clínicos para acelerar medicamentos en décadas.</p>
+        </div>
+      </div>
+      <div class="futuro-item">
+        <div class="futuro-icon">🌍</div>
+        <div>
+          <h3>Clima y Sostenibilidad</h3>
+          <p>Modelos climáticos de alta resolución, optimización de redes eléctricas renovables y diseño de materiales con menor huella de carbono.</p>
+        </div>
+      </div>
+      <div class="futuro-item">
+        <div class="futuro-icon">⚡</div>
+        <div>
+          <h3>Hardware Especializado</h3>
+          <p>Chips neuromórficos, computación cuántica aplicada a IA y eficiencia energética como prioridad de diseño ante la escala creciente.</p>
+        </div>
+      </div>
+      <div class="futuro-item">
+        <div class="futuro-icon">🔐</div>
+        <div>
+          <h3>Seguridad de IA</h3>
+          <p>Interpretabilidad mecánica, alineación robusta y marcos de evaluación de riesgos para sistemas cada vez más capaces y autónomos.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RECURSOS -->
+<section id="recursos" class="recursos-section">
+  <div class="container">
+    <p class="section-label">Para seguir aprendiendo</p>
+    <h2>Recursos esenciales</h2>
+    <p>Lecturas, cursos y herramientas para profundizar desde cualquier nivel de experiencia.</p>
+    <div class="recursos-grid reveal">
+      <a href="https://www.deeplearning.ai" target="_blank" class="recurso-card">
+        <p class="recurso-type">Cursos</p>
+        <h3>DeepLearning.AI</h3>
+        <p>Cursos de Andrew Ng. Desde fundamentos de ML hasta LLMs y IA generativa.</p>
+        <span class="recurso-arrow">→ deeplearning.ai</span>
+      </a>
+      <a href="https://arxiv.org/list/cs.AI/recent" target="_blank" class="recurso-card">
+        <p class="recurso-type">Investigación</p>
+        <h3>arXiv CS.AI</h3>
+        <p>Preprints de investigación en IA. Acceso inmediato a los últimos avances científicos.</p>
+        <span class="recurso-arrow">→ arxiv.org</span>
+      </a>
+      <a href="https://huggingface.co" target="_blank" class="recurso-card">
+        <p class="recurso-type">Plataforma</p>
+        <h3>Hugging Face</h3>
+        <p>Miles de modelos open source, datasets y demos interactivas. El GitHub de la IA.</p>
+        <span class="recurso-arrow">→ huggingface.co</span>
+      </a>
+      <a href="https://openai.com/research" target="_blank" class="recurso-card">
+        <p class="recurso-type">Investigación</p>
+        <h3>OpenAI Research</h3>
+        <p>Publicaciones sobre GPT, DALL-E, seguridad de IA y aprendizaje por refuerzo.</p>
+        <span class="recurso-arrow">→ openai.com/research</span>
+      </a>
+      <a href="https://www.anthropic.com/research" target="_blank" class="recurso-card">
+        <p class="recurso-type">Seguridad</p>
+        <h3>Anthropic Research</h3>
+        <p>Investigación sobre alineación, interpretabilidad y IA constitucional.</p>
+        <span class="recurso-arrow">→ anthropic.com</span>
+      </a>
+      <a href="https://fast.ai" target="_blank" class="recurso-card">
+        <p class="recurso-type">Práctica</p>
+        <h3>fast.ai</h3>
+        <p>Enfoque práctico y accesible al deep learning. Ideal para comenzar con proyectos reales.</p>
+        <span class="recurso-arrow">→ fast.ai</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- GLOSARIO -->
+<section id="glosario">
+  <div class="container">
+    <p class="section-label">Vocabulario</p>
+    <h2>Glosario de IA</h2>
+    <p>Los términos que debes conocer para navegar la conversación pública sobre inteligencia artificial.</p>
+    <div class="glosario-grid reveal">
+      <div class="glosario-item">
+        <p class="glosario-term">Transformer</p>
+        <p>Arquitectura de red neuronal basada en mecanismos de atención. Base de GPT, Claude, Gemini y la mayoría de los LLMs modernos.</p>
+      </div>
+      <div class="glosario-item">
+        <p class="glosario-term">Token</p>
+        <p>Unidad básica de texto para los LLMs. Aproximadamente ¾ de una palabra. Los modelos generan un token a la vez.</p>
+      </div>
+      <div class="glosario-item">
+        <p class="glosario-term">Fine-tuning</p>
+        <p>Ajuste de un modelo preentrenado con datos específicos para una tarea concreta. Más eficiente que entrenar desde cero.</p>
+      </div>
+      <div class="glosario-item">
+        <p class="glosario-term">RAG</p>
+        <p>Retrieval-Augmented Generation. Técnica para conectar un LLM a bases de conocimiento externas en tiempo de inferencia.</p>
+      </div>
+      <div class="glosario-item">
+        <p class="glosario-term">Prompt</p>
+        <p>La instrucción o entrada que se le da a un modelo de lenguaje. El prompt engineering es el arte de formularlos bien.</p>
+      </div>
+      <div class="glosario-item">
+        <p class="glosario-term">Hallucination</p>
+        <p>Cuando un LLM genera información convincente pero factualmente incorrecta. Principal desafío de confiabilidad actual.</p>
+      </div>
+      <div class="glosario-item">
+        <p class="glosario-term">RLHF</p>
+        <p>Reinforcement Learning from Human Feedback. Técnica para alinear modelos con preferencias y valores humanos.</p>
+      </div>
+      <div class="glosario-item">
+        <p class="glosario-term">Embedding</p>
+        <p>Representación vectorial de texto, imágenes u otros datos en un espacio de alta dimensión que captura significado semántico.</p>
+      </div>
+      <div class="glosario-item">
+        <p class="glosario-term">Overfitting</p>
+        <p>Cuando un modelo memoriza los datos de entrenamiento pero falla al generalizar a datos nuevos no vistos.</p>
+      </div>
+      <div class="glosario-item">
+        <p class="glosario-term">Context Window</p>
+        <p>La cantidad máxima de texto que un LLM puede procesar en una sola interacción. Medida en tokens.</p>
+      </div>
+      <div class="glosario-item">
+        <p class="glosario-term">Multimodal</p>
+        <p>Sistemas que procesan múltiples tipos de datos simultáneamente: texto, imagen, audio, video y código.</p>
+      </div>
+      <div class="glosario-item">
+        <p class="glosario-term">Alineación</p>
+        <p>El problema de asegurar que los sistemas de IA actúen de acuerdo con los valores e intenciones humanas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">IA</span>
+  <p>Inteligencia Artificial · Guía Completa 2025</p>
+  <p style="margin-top: 0.5rem; font-size: 0.8rem;">Contenido educativo · Actualizado con los últimos avances del campo</p>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
