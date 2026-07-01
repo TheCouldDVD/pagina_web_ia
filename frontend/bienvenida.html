@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bienvenida</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #0b1120, #161f30);
+      font-family: Arial, sans-serif;
+      color: #f0f4ff;
+    }
+
+    .welcome-card {
+      text-align: center;
+      padding: 2rem 3rem;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.08);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      backdrop-filter: blur(8px);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2.2rem;
+      letter-spacing: 0.02em;
+    }
+  </style>
+</head>
+<body>
+  <div class="welcome-card" id="welcomeContent">
+    <h1>Bienvenido al mundo de la IA</h1>
+  </div>
+
+  <script>
+    const loggedIn = localStorage.getItem('ia_logged_in') === 'true';
+
+    if (!loggedIn) {
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

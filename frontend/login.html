@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar sesión</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="auth-page">
+    <section class="auth-card">
+      <div class="auth-switch">
+        <button class="auth-tab active" data-form="login">Iniciar sesión</button>
+        <button class="auth-tab" data-form="register">Registrarse</button>
+      </div>
+
+      <form class="auth-form" id="loginForm">
+        <h1>Iniciar sesión</h1>
+        <p>Accede a tu cuenta para continuar.</p>
+        <label>
+          Correo electrónico
+          <input type="email" name="email" placeholder="tu@email.com" required>
+        </label>
+        <label>
+          Contraseña
+          <input type="password" name="password" placeholder="********" required>
+        </label>
+        <button type="submit" class="btn btn-primary">Entrar</button>
+      </form>
+
+      <form class="auth-form hidden" id="registerForm">
+        <h1>Crear cuenta</h1>
+        <p>Regístrate para entrar al mundo de la IA.</p>
+        <label>
+          Correo electrónico
+          <input type="email" name="email" placeholder="tu@email.com" required>
+        </label>
+        <label>
+          Contraseña
+          <input type="password" name="password" placeholder="********" required>
+        </label>
+        <button type="submit" class="btn btn-primary">Registrarme</button>
+      </form>
+
+      <a href="index.html" class="auth-link">Volver al inicio</a>
+    </section>
+  </main>
+
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const tabs = document.querySelectorAll('.auth-tab');
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        tabs.forEach((t) => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        if (tab.dataset.form === 'register') {
+          loginForm.classList.add('hidden');
+          registerForm.classList.remove('hidden');
+        } else {
+          registerForm.classList.add('hidden');
+          loginForm.classList.remove('hidden');
+        }
+      });
+    });
+
+    loginForm.addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      const email = loginForm.querySelector('input[name="email"]').value.trim();
+      const password = loginForm.querySelector('input[name="password"]').value;
+
+      try {
+        const response = await fetch('http://localhost:8000/auth.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'login', email, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          alert(data.message || 'Credenciales inválidas.');
+          return;
+        }
+
+        localStorage.setItem('ia_logged_in', 'true');
+        window.location.href = 'bienvenida.html';
+      } catch (error) {
+        console.error(error);
+        alert('No se pudo conectar con el servidor de autenticación.');
+      }
+    });
+
+    registerForm.addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      const email = registerForm.querySelector('input[name="email"]').value.trim();
+      const password = registerForm.querySelector('input[name="password"]').value;
+
+      try {
+        const response = await fetch('http://localhost:8000/auth.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'register', email, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          alert(data.message || 'No se pudo crear la cuenta.');
+          return;
+        }
+
+        alert('Cuenta creada correctamente. Ahora puedes iniciar sesión.');
+        registerForm.reset();
+        tabs[0].click();
+      } catch (error) {
+        console.error(error);
+        alert('No se pudo conectar con el servidor de autenticación.');
+      }
+    });
+  </script>
+</body>
+</html>
